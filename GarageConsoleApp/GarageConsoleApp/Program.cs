@@ -24,7 +24,10 @@ public class Program
         DatabaseRequests.AddTypeCarQuery("Воздушный");
         // Вызовем метод для получения данных о типах автомобилей
         DatabaseRequests.GetTypeCarQuery();*/
-        Console.Clear();
+        
+        
+        
+        //Console.Clear();
         Console.WriteLine("Добро пожаловать в систему управления предприятием.");
         
 
@@ -42,10 +45,11 @@ public class Program
             switch (getChoose())
             {
                 case 1:
-                    Console.Write("\t1 - просмотр\n" +
-                                  "\t2 - добавление\n" +
-                                  "\t0 - возврат\n" +
-                                  "\t> ");
+                    //1. Просмотр и добавление типов машин;
+                    Console.Write("  1 - просмотр\n" +
+                                  "  2 - добавление\n" +
+                                  "  0 - возврат\n" +
+                                  "  > ");
                 
                     switch (getChoose())
                     {
@@ -53,8 +57,7 @@ public class Program
                             DatabaseRequests.GetTypeCarQuery();
                             break;
                         case 2:
-                            //добавление типов машин
-                            Console.Write("запрос: ");
+                            Console.Write("Название типа авто: ");
                             DatabaseRequests.AddTypeCarQuery(Console.ReadLine());
                             break;
                         case 0:
@@ -62,15 +65,96 @@ public class Program
                     }
                     break;
                 case 2:
-                    //водители, их права
+                    //2. Просмотр и добавление водителей и их прав;
+                    
+                    Console.Write("  1 - просмотр\n" +
+                                  "  2 - добавление\n" +
+                                  "  0 - возврат\n" +
+                                  "  > ");
+                
+                    switch (getChoose())
+                    {
+                        case 1:
+                            //просмотр водителей и прав
+                            Console.Write("    1 - все водители\n" +
+                                          "    2 - по ID\n" +
+                                          "    0 - возврат\n" +
+                                          "    > ");
+                
+                            switch (getChoose())
+                            {
+                                case 1:
+                                    //все водители
+                                    DatabaseRequests.GetDriverAndRightsCategoryQuery();
+                                    break;
+                                case 2:
+                                    //по ID
+                                    Console.Write("ID водителя: ");
+                                    DatabaseRequests.GetDriverRightsCategoryQuery(Convert.ToInt32(Console.ReadLine()));
+                                    break;
+                                case 0:
+                                    break;
+                            }
+                            break;
+                        case 2:
+                            //добавление водителей и прав
+                            Console.Write("Имя: ");
+                            string name = Console.ReadLine();
+                            Console.Write("Фамилия: ");
+                            string surname = Console.ReadLine();
+                            Console.Write("Дата рождения: ");
+                            DateTime date = Convert.ToDateTime(Console.ReadLine());
+                            int id = DatabaseRequests.AddDriverQuery(name, surname, date);
+                            
+                            Console.Write("Введите категории прав (слитно): ");
+                            string rights = Console.ReadLine();
+                            foreach (var category in rights)
+                            {
+                                var categoryId = DatabaseRequests.GetDriverRightsCategoryByNameQuery(category);
+                                if (categoryId != -1)
+                                {
+                                    DatabaseRequests.AddDriverRightsCategoryQuery(id, categoryId);
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Категории {category} не существует!");
+                                }
+                            }
+                            break;
+                        case 0:
+                            break;
+                    }
                     break;
                 case 3:
+                    //3. Просмотр и добавление машин;
                     //машины
+                    Console.Write("  1 - просмотр\n" +
+                                  "  2 - добавление\n" +
+                                  "  0 - возврат\n" +
+                                  "  > ");
+                    
+                    switch (getChoose())
+                    {
+                        case 1:
+                            DatabaseRequests.GetCarQuery();
+                            break;
+                        case 2:
+                            Console.Write("запрос: ");
+                            //DatabaseRequests.AddTypeCarQuery(Console.ReadLine());
+                            
+                            //TODO: доделать добавление авто
+                            
+                            break;
+                        case 0:
+                            break;
+                    }
                     break;
                 case 4:
+                    //4. Просмотр и добавление маршрутов;
                     //маршруты
                     break;
                 case 5:
+                    //5. Просмотр и добавление рейсов;
                     //рейсы
                     break;
                 case 0:
@@ -85,13 +169,13 @@ public class Program
 
     static int getChoose()
     {
-        int choose = 0;
+        int choose;
         while (true)
         {
             try
             {
                 choose = Convert.ToInt32(Console.ReadLine());
-                Console.Clear();
+                //Console.Clear();
                 return choose;
             }
             catch (Exception e)

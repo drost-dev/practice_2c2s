@@ -60,11 +60,20 @@ public static class DatabaseRequests
     /// Метод AddDriverQuery
     /// отправляет запрос в БД на добавление водителей
     /// </summary>
-    public static void AddDriverQuery(string firstName, string lastName, DateTime birthdate)
+    public static int AddDriverQuery(string firstName, string lastName, DateTime birthdate)
     {
         var querySql = $"INSERT INTO driver(first_name, last_name, birthdate) VALUES ('{firstName}', '{lastName}', '{birthdate}')";
         using var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
         cmd.ExecuteNonQuery();
+
+        querySql = $"SELECT count(*) FROM driver";
+        var reader = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection()).ExecuteReader();
+        reader.Read();
+        var id = reader[0];
+        reader.Close();
+        Console.WriteLine(id);
+        Console.WriteLine("Сотрудник добавлен!");
+        return Convert.ToInt32(id);
     }
 
     /// <summary>
@@ -80,7 +89,18 @@ public static class DatabaseRequests
 
         while (reader.Read())
         {
-            Console.WriteLine($"Id: {reader[0]} Имя: {reader[1]} Фамилия: {reader[2]} Дата рождения: {reader[3]}");
+            Console.WriteLine($"Id: {reader[0]}, Имя: {reader[1]}, Фамилия: {reader[2]}, Дата рождения: {reader[3]}");
+        }
+    }
+    
+    public static void GetDriverAndRightsCategoryQuery()
+    {
+        var querySql = "SELECT * FROM driver INNER JOIN public.driver_rights_category drc on driver.id = drc.id_driver INNER JOIN public.rights_category rc on drc.id_rights_category = rc.id";
+        using var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
+        using var reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            Console.WriteLine($"Id: {reader[0]}, Имя: {reader[1]}, Фамилия: {reader[2]}, Дата рождения: {reader[3]}, Категория прав: {reader[7]}");
         }
     }
 
@@ -105,6 +125,27 @@ public static class DatabaseRequests
         using var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
         cmd.ExecuteNonQuery();
     }
+    
+    public static int GetDriverRightsCategoryByNameQuery(char name)
+    {
+        var querySql = $"SELECT id FROM rights_category WHERE name='{name}'";
+        using var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
+        cmd.ExecuteNonQuery();
+        var reader = cmd.ExecuteReader();
+        reader.Read();
+        
+        try
+        {
+            var categoryId = reader[0];
+            reader.Close();
+            return Convert.ToInt32(categoryId);
+        }
+        catch (Exception e)
+        {
+            reader.Close();
+            return -1;
+        }
+    }
 
     /// <summary>
     /// Метод GetDriverRightsCategoryQuery
@@ -123,7 +164,46 @@ public static class DatabaseRequests
 
         while (reader.Read())
         {
-            Console.WriteLine($"Имя: {reader[0]} Фамилия: {reader[1]} Категория прав: {reader[2]}");
+            Console.WriteLine($"Имя: {reader[0]}, Фамилия: {reader[1]}, Категория прав: {reader[2]}");
+        }
+    }
+    
+    public static void GetCarQuery()
+    {
+        // Сохраняем в переменную запрос на получение всех данных и таблицы type_car
+        var querySql = "SELECT * FROM car INNER JOIN public.type_car tc on tc.id = car.id_type_car";
+        // Создаем команду(запрос) cmd, передаем в нее запрос и соединение к БД
+        using var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
+        // Выполняем команду(запрос)
+        // результат команды сохранится в переменную reader
+        using var reader = cmd.ExecuteReader();
+        
+        // Выводим данные которые вернула БД
+        while (reader.Read())
+        {
+            Console.WriteLine($"Id: {reader[0]}, Модель: {reader[2]}, Госномер: {reader[3]}, Число пассажиров: {reader[4]}, Тип авто: {reader[6]}");
+        }
+    }
+    
+    public static void AddCarQuery(string name)
+    {
+        var chechExistQuerySql = $"SELECT count(name) FROM type_car WHERE name='{name}'";
+        using var cmd = new NpgsqlCommand(chechExistQuerySql, DatabaseService.GetSqlConnection());
+        using var reader = cmd.ExecuteReader();
+        reader.Read();
+        //cmd.Cancel();
+        if (Convert.ToInt32(reader[0]) >= 1)
+        {
+            Console.WriteLine("Такой тип уже существует!");
+        }
+        else
+        {
+            reader.Close();
+            cmd.Cancel();
+            var querySql = $"INSERT INTO type_car(name) VALUES ('{name}')";
+            using var cmd2 = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
+            cmd2.ExecuteNonQuery();
+            Console.WriteLine($"\"{name}\" добавлен!");
         }
     }
 }
