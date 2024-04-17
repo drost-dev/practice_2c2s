@@ -3,6 +3,8 @@ SELECT * FROM rights_category;
 -- Вывод всех данных из таблицы Driver
 SELECT * FROM driver;
 
+INSERT INTO car(id_type_car, name, state_number, number_passengers) VALUES ('3', 'bnw cls', 'Е666КХ70', 4);
+
 -- Добавление данных в таблицу Driver
 INSERT INTO driver(first_name, last_name, birthdate) VALUES ('Иван', 'Салманов', '2000-02-01');
 

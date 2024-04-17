@@ -36,8 +36,8 @@ public static class DatabaseRequests
     /// </summary>
     public static void AddTypeCarQuery(string name)
     {
-        var chechExistQuerySql = $"SELECT count(name) FROM type_car WHERE name='{name}'";
-        using var cmd = new NpgsqlCommand(chechExistQuerySql, DatabaseService.GetSqlConnection());
+        var checkExistQuerySql = $"SELECT count(name) FROM type_car WHERE name='{name}'";
+        using var cmd = new NpgsqlCommand(checkExistQuerySql, DatabaseService.GetSqlConnection());
         using var reader = cmd.ExecuteReader();
         reader.Read();
         //cmd.Cancel();
@@ -62,7 +62,7 @@ public static class DatabaseRequests
     /// </summary>
     public static int AddDriverQuery(string firstName, string lastName, DateTime birthdate)
     {
-        var querySql = $"INSERT INTO driver(first_name, last_name, birthdate) VALUES ('{firstName}', '{lastName}', '{birthdate}')";
+        var querySql = $"INSERT INTO driver(first_name, last_name, birthdate) VALUES ('{firstName}', '{lastName}', '{birthdate.Year}-{birthdate.Month}-{birthdate.Day}')";
         using var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
         cmd.ExecuteNonQuery();
 
@@ -185,14 +185,14 @@ public static class DatabaseRequests
         }
     }
     
-    public static void AddCarQuery(string name)
+    public static void AddCarQuery(int id, string name, string stateNumber, int numOfPassengers)
     {
-        var chechExistQuerySql = $"SELECT count(name) FROM type_car WHERE name='{name}'";
-        using var cmd = new NpgsqlCommand(chechExistQuerySql, DatabaseService.GetSqlConnection());
+        var checkExistQuerySql = $"SELECT count(id) FROM type_car WHERE id='{id}'";
+        using var cmd = new NpgsqlCommand(checkExistQuerySql, DatabaseService.GetSqlConnection());
         using var reader = cmd.ExecuteReader();
         reader.Read();
         //cmd.Cancel();
-        if (Convert.ToInt32(reader[0]) >= 1)
+        if (Convert.ToInt32(reader[0]) != 1)
         {
             Console.WriteLine("Такой тип уже существует!");
         }
@@ -200,10 +200,10 @@ public static class DatabaseRequests
         {
             reader.Close();
             cmd.Cancel();
-            var querySql = $"INSERT INTO type_car(name) VALUES ('{name}')";
+            var querySql = $"INSERT INTO car(id_type_car, name, state_number, number_passengers) VALUES ('{id}', '{name}', '{stateNumber}', '{numOfPassengers}')";
             using var cmd2 = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
             cmd2.ExecuteNonQuery();
-            Console.WriteLine($"\"{name}\" добавлен!");
+            Console.WriteLine($"Авто \"{name}\" добавлено!");
         }
     }
 }

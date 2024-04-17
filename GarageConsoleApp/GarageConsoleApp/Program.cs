@@ -29,7 +29,6 @@ public class Program
         
         //Console.Clear();
         Console.WriteLine("Добро пожаловать в систему управления предприятием.");
-        
 
         while (true)
         {
@@ -103,8 +102,8 @@ public class Program
                             Console.Write("Фамилия: ");
                             string surname = Console.ReadLine();
                             Console.Write("Дата рождения: ");
-                            DateTime date = Convert.ToDateTime(Console.ReadLine());
-                            int id = DatabaseRequests.AddDriverQuery(name, surname, date);
+                            var date = Console.ReadLine();
+                            int id = DatabaseRequests.AddDriverQuery(name, surname, DateTime.Parse(date));
                             
                             Console.Write("Введите категории прав (слитно): ");
                             string rights = Console.ReadLine();
@@ -139,9 +138,17 @@ public class Program
                             DatabaseRequests.GetCarQuery();
                             break;
                         case 2:
-                            Console.Write("запрос: ");
+                            Console.Write("Тип авто: ");
+                            int id = Convert.ToInt32(Console.ReadLine());
+                            Console.Write("Название: ");
+                            string name = Console.ReadLine();
+                            Console.Write("Госномер: ");
+                            string stateNum = Console.ReadLine();
+                            Console.Write("Число пассажиров: ");
+                            int numOfPass = Convert.ToInt32(Console.ReadLine());
                             //DatabaseRequests.AddTypeCarQuery(Console.ReadLine());
                             
+                            DatabaseRequests.AddCarQuery(id, name, stateNum, numOfPass);
                             //TODO: доделать добавление авто
                             
                             break;

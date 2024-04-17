@@ -89,3 +89,33 @@ D:\Rider\Rider Projects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debu
 D:\Rider\Rider Projects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\GarageConsoleApp.pdb
 D:\Rider\Rider Projects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\GarageConsoleApp.genruntimeconfig.cache
 D:\Rider\Rider Projects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\ref\GarageConsoleApp.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\GarageConsoleApp.exe
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\GarageConsoleApp.deps.json
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\GarageConsoleApp.runtimeconfig.json
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\GarageConsoleApp.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\GarageConsoleApp.pdb
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Microsoft.Extensions.Logging.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Npgsql.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\bin\Debug\net6.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\GarageConsoleApp.csproj.AssemblyReference.cache
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\GarageConsoleApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\GarageConsoleApp.AssemblyInfoInputs.cache
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\GarageConsoleApp.AssemblyInfo.cs
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\GarageConsoleApp.csproj.CoreCompileInputs.cache
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\GarageConsoleApp.csproj.CopyComplete
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\GarageConsoleApp.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\refint\GarageConsoleApp.dll
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\GarageConsoleApp.pdb
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\GarageConsoleApp.genruntimeconfig.cache
+C:\Users\gr622_ezaal\RiderProjects\practice_2c2s\GarageConsoleApp\GarageConsoleApp\obj\Debug\net6.0\ref\GarageConsoleApp.dll
