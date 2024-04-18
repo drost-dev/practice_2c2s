@@ -119,6 +119,7 @@ public class Program
                                     Console.WriteLine($"Категории {category} не существует!");
                                 }
                             }
+                            Console.WriteLine("Сотрудник добавлен!");
                             break;
                         case 0:
                             break;
@@ -138,7 +139,7 @@ public class Program
                             DatabaseRequests.GetCarQuery();
                             break;
                         case 2:
-                            Console.Write("Тип авто: ");
+                            Console.Write("ID типа авто: ");
                             int id = Convert.ToInt32(Console.ReadLine());
                             Console.Write("Название: ");
                             string name = Console.ReadLine();
@@ -146,11 +147,7 @@ public class Program
                             string stateNum = Console.ReadLine();
                             Console.Write("Число пассажиров: ");
                             int numOfPass = Convert.ToInt32(Console.ReadLine());
-                            //DatabaseRequests.AddTypeCarQuery(Console.ReadLine());
-                            
                             DatabaseRequests.AddCarQuery(id, name, stateNum, numOfPass);
-                            //TODO: доделать добавление авто
-                            
                             break;
                         case 0:
                             break;
@@ -158,11 +155,46 @@ public class Program
                     break;
                 case 4:
                     //4. Просмотр и добавление маршрутов;
-                    //маршруты
+                    Console.Write("  1 - просмотр\n" +
+                                  "  2 - добавление\n" +
+                                  "  0 - возврат\n" +
+                                  "  > ");
+                    
+                    switch (getChoose())
+                    {
+                        case 1:
+                            DatabaseRequests.GetItinearyQuery();
+                            break;
+                        case 2:
+                            Console.Write("Введите название маршрута: ");
+                            string name = Console.ReadLine();
+                            DatabaseRequests.AddItinearyQuery(name);
+                            break;
+                        case 0:
+                            break;
+                    }
                     break;
                 case 5:
                     //5. Просмотр и добавление рейсов;
                     //рейсы
+                    Console.Write("  1 - просмотр\n" +
+                                  "  2 - добавление\n" +
+                                  "  0 - возврат\n" +
+                                  "  > ");
+                    
+                    switch (getChoose())
+                    {
+                        case 1:
+                            DatabaseRequests.GetRouteQuery();
+                            break;
+                        case 2:
+                            
+                            DatabaseRequests.AddRouteQuery(1, 1, 1, 10);
+                            //DatabaseRequests.AddItinearyQuery(name);
+                            break;
+                        case 0:
+                            break;
+                    }
                     break;
                 case 0:
                     Environment.Exit(-1);

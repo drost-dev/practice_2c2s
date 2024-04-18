@@ -23,3 +23,5 @@ FROM driver_rights_category
          INNER JOIN driver dr on driver_rights_category.id_driver = dr.id
          INNER JOIN rights_category rc on rc.id = driver_rights_category.id_rights_category
 WHERE dr.id = 1;
+
+SELECT 

@@ -26,7 +26,7 @@ public static class DatabaseRequests
         // Выводим данные которые вернула БД
         while (reader.Read())
         {
-            Console.WriteLine($"Id: {reader[0]} Название: {reader[1]}");
+            Console.WriteLine($"Id: {reader[0]}, Название: {reader[1]}");
         }
     }
 
@@ -43,7 +43,7 @@ public static class DatabaseRequests
         //cmd.Cancel();
         if (Convert.ToInt32(reader[0]) >= 1)
         {
-            Console.WriteLine("Такой тип уже существует!");
+            Console.WriteLine($"Тип \"{name}\" уже существует!");
         }
         else
         {
@@ -62,7 +62,8 @@ public static class DatabaseRequests
     /// </summary>
     public static int AddDriverQuery(string firstName, string lastName, DateTime birthdate)
     {
-        var querySql = $"INSERT INTO driver(first_name, last_name, birthdate) VALUES ('{firstName}', '{lastName}', '{birthdate.Year}-{birthdate.Month}-{birthdate.Day}')";
+        var querySql = $"INSERT INTO driver(first_name, last_name, birthdate) " +
+                       $"VALUES ('{firstName}', '{lastName}', '{birthdate.Year}-{birthdate.Month}-{birthdate.Day}')";
         using var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
         cmd.ExecuteNonQuery();
 
@@ -71,8 +72,6 @@ public static class DatabaseRequests
         reader.Read();
         var id = reader[0];
         reader.Close();
-        Console.WriteLine(id);
-        Console.WriteLine("Сотрудник добавлен!");
         return Convert.ToInt32(id);
     }
 
@@ -95,12 +94,15 @@ public static class DatabaseRequests
     
     public static void GetDriverAndRightsCategoryQuery()
     {
-        var querySql = "SELECT * FROM driver INNER JOIN public.driver_rights_category drc on driver.id = drc.id_driver INNER JOIN public.rights_category rc on drc.id_rights_category = rc.id";
+        var querySql = "SELECT * FROM driver " +
+                       "INNER JOIN public.driver_rights_category drc on driver.id = drc.id_driver " +
+                       "INNER JOIN public.rights_category rc on drc.id_rights_category = rc.id";
         using var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
         using var reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            Console.WriteLine($"Id: {reader[0]}, Имя: {reader[1]}, Фамилия: {reader[2]}, Дата рождения: {reader[3]}, Категория прав: {reader[7]}");
+            Console.WriteLine($"Id: {reader[0]}, Имя: {reader[1]}, Фамилия: {reader[2]}, " +
+                              $"Дата рождения: {reader[3]}, Категория прав: {reader[7]}");
         }
     }
 
@@ -126,9 +128,9 @@ public static class DatabaseRequests
         cmd.ExecuteNonQuery();
     }
     
-    public static int GetDriverRightsCategoryByNameQuery(char name)
+    public static int GetDriverRightsCategoryByNameQuery(char category)
     {
-        var querySql = $"SELECT id FROM rights_category WHERE name='{name}'";
+        var querySql = $"SELECT id FROM rights_category WHERE name='{category}'";
         using var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
         cmd.ExecuteNonQuery();
         var reader = cmd.ExecuteReader();
@@ -181,7 +183,8 @@ public static class DatabaseRequests
         // Выводим данные которые вернула БД
         while (reader.Read())
         {
-            Console.WriteLine($"Id: {reader[0]}, Модель: {reader[2]}, Госномер: {reader[3]}, Число пассажиров: {reader[4]}, Тип авто: {reader[6]}");
+            Console.WriteLine($"Id: {reader[0]}, Модель: {reader[2]}, Госномер: {reader[3]}, " +
+                              $"Число пассажиров: {reader[4]}, Тип авто: {reader[6]}");
         }
     }
     
@@ -194,16 +197,95 @@ public static class DatabaseRequests
         //cmd.Cancel();
         if (Convert.ToInt32(reader[0]) != 1)
         {
-            Console.WriteLine("Такой тип уже существует!");
+            Console.WriteLine($"Авто \"{name}\" уже существует!");
         }
         else
         {
             reader.Close();
             cmd.Cancel();
-            var querySql = $"INSERT INTO car(id_type_car, name, state_number, number_passengers) VALUES ('{id}', '{name}', '{stateNumber}', '{numOfPassengers}')";
+            var querySql = $"INSERT INTO car(id_type_car, name, state_number, number_passengers) " +
+                           $"VALUES ('{id}', '{name}', '{stateNumber}', '{numOfPassengers}')";
             using var cmd2 = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
             cmd2.ExecuteNonQuery();
             Console.WriteLine($"Авто \"{name}\" добавлено!");
+        }
+    }
+    
+    public static void GetItinearyQuery()
+    {
+        var querySql = "SELECT * FROM itinerary";
+        using var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
+        using var reader = cmd.ExecuteReader();
+        
+        while (reader.Read())
+        {
+            Console.WriteLine($"Id: {reader[0]}, Название: {reader[1]}");
+        }
+    }
+    
+    public static void AddItinearyQuery(string name)
+    {
+        var querySql = $"SELECT count(name) FROM itinerary WHERE name = '{name}'";
+        var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
+        var reader = cmd.ExecuteReader();
+        reader.Read();
+        
+        if (Convert.ToInt32(reader[0]) == 0)
+        {
+            cmd.Cancel();
+            reader.Close();
+            querySql = $"INSERT INTO itinerary(name) VALUES ('{name}')";
+            cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
+            cmd.ExecuteNonQuery();
+            Console.WriteLine($"Маршрут \"{name}\" добавлен!");
+        }
+        else
+        {
+            Console.WriteLine($"Маршрут \"{name}\" уже существует!");
+        }
+    }
+    
+    public static void GetRouteQuery()
+    {
+        var querySql = "SELECT route.id, d.first_name, d.last_name, c.name, c.state_number, i.name, route.number_passengers " +
+                       "FROM route " +
+                       "inner join driver d on d.id = route.id_driver " +
+                       "inner join car c on c.id = route.id_car " +
+                       "inner join itinerary i on i.id = route.id_itinerary";
+        using var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
+        using var reader = cmd.ExecuteReader();
+        
+        while (reader.Read())
+        {
+            Console.WriteLine($"Id: {reader[0]}, Водитель: {reader[1]} {reader[2]}, Авто: {reader[3]}, " +
+                              $"Госномер: {reader[4]}, Маршрут: {reader[5]}, Количество пассажиров: {reader[6]}");
+        }
+    }
+    
+    public static void AddRouteQuery(int idDriver, int idCar, int idItinerary, int numOfPassengers)
+    {
+        /*var querySql = $"INSERT INTO route(id_driver, id_car, id_itinerary, number_passengers) " +
+                       $"VALUES ('{idDriver}', '{idCar}', '{idItinerary}', '{numOfPassengers}')";*/
+        var querySql =
+            $"SELECT count(*) FROM route WHERE id_driver='{idDriver}' AND id_car='{idCar}' " +
+            $"AND id_itinerary='{idItinerary}' AND number_passengers='{numOfPassengers}'";
+        var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
+        var reader = cmd.ExecuteReader();
+        reader.Read();
+        
+        if (Convert.ToInt32(reader[0]) == 0)
+        {
+            cmd.Cancel();
+            reader.Close();
+            querySql = $"INSERT INTO route(id_driver, id_car, id_itinerary, number_passengers) " +
+                       $"VALUES ('{idDriver}', '{idCar}', '{idItinerary}', '{numOfPassengers}')";
+            cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
+            cmd.ExecuteNonQuery();
+            Console.WriteLine($"Рейс добавлен!");
+        }
+        else
+        {
+            Console.WriteLine($"Рейс уже существует!");
         }
     }
 }
