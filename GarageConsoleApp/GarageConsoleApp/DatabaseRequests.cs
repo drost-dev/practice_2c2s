@@ -60,19 +60,90 @@ public static class DatabaseRequests
     /// Метод AddDriverQuery
     /// отправляет запрос в БД на добавление водителей
     /// </summary>
-    public static int AddDriverQuery(string firstName, string lastName, DateTime birthdate)
+    public static void AddDriverQuery(string firstName, string lastName, DateTime birthdate, string categories)
     {
-        var querySql = $"INSERT INTO driver(first_name, last_name, birthdate) " +
+        var querySql = $"SELECT count(*) FROM driver WHERE first_name='{firstName}' AND last_name='{lastName}'";
+        using (var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection()))
+        {
+            cmd.ExecuteNonQuery();
+            cmd.Cancel();
+        }
+        
+        querySql = $"INSERT INTO driver(first_name, last_name, birthdate) " +
                        $"VALUES ('{firstName}', '{lastName}', '{birthdate.Year}-{birthdate.Month}-{birthdate.Day}')";
-        using var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
-        cmd.ExecuteNonQuery();
+        using (var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection()))
+        {
+            cmd.ExecuteNonQuery();
+            cmd.Cancel();
+        }
+        
+        querySql = $"SELECT id FROM driver WHERE first_name='{firstName}' AND last_name='{lastName}'";
+        int idDriver;
+        using (var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection()))
+        {
+            var reader = cmd.ExecuteReader();
+            reader.Read();
+            idDriver = Convert.ToInt32(reader[0]);
+            reader.Close();
+            cmd.Cancel();
+        }
 
-        querySql = $"SELECT count(*) FROM driver";
-        var reader = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection()).ExecuteReader();
-        reader.Read();
-        var id = reader[0];
-        reader.Close();
-        return Convert.ToInt32(id);
+        bool atLeatsOneCategoryAdded = false;
+        foreach (var category in categories)
+        {
+            try
+            {
+                querySql = $"SELECT count(id) FROM rights_category WHERE name='{category}'";
+                using (var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection()))
+                {
+                    var reader = cmd.ExecuteReader();
+                    reader.Read();
+                    if (Convert.ToInt32(reader[0]) == 0)
+                    {
+                        Console.WriteLine($"Категории \"{category}\" не существует!");
+                        reader.Close();
+                        cmd.Cancel();
+                        continue;
+                    }
+                    reader.Close();
+                    cmd.Cancel();
+                }
+                
+                int idCategory;
+                querySql = $"SELECT id FROM rights_category WHERE name='{category}'";
+                using (var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection()))
+                {
+                    var reader = cmd.ExecuteReader();
+                    reader.Read();
+                    idCategory = Convert.ToInt32(reader[0]);
+                    reader.Close();
+                    cmd.Cancel();
+                }
+                
+                querySql = $"INSERT INTO driver_rights_category(id_driver, id_rights_category) VALUES " +
+                           $"('{idDriver}', '{idCategory}')";
+                using (var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection()))
+                {
+                    cmd.ExecuteNonQuery();
+                    cmd.Cancel();
+                }
+
+                atLeatsOneCategoryAdded = true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        if (!atLeatsOneCategoryAdded)
+        {
+            querySql = $"DELETE FROM driver WHERE id='{idDriver}'";
+            using (var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection()))
+            {
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 
     /// <summary>
@@ -191,22 +262,34 @@ public static class DatabaseRequests
     public static void AddCarQuery(int id, string name, string stateNumber, int numOfPassengers)
     {
         var checkExistQuerySql = $"SELECT count(id) FROM type_car WHERE id='{id}'";
-        using var cmd = new NpgsqlCommand(checkExistQuerySql, DatabaseService.GetSqlConnection());
-        using var reader = cmd.ExecuteReader();
-        reader.Read();
+        int count = 0;
+        using (var cmd = new NpgsqlCommand(checkExistQuerySql, DatabaseService.GetSqlConnection()))
+        {
+            using var reader = cmd.ExecuteReader();
+            reader.Read();
+            count = Convert.ToInt32(reader[0]);
+            reader.Close();
+            cmd.Cancel();
+        }
+        
         //cmd.Cancel();
-        if (Convert.ToInt32(reader[0]) != 1)
+        if (Convert.ToInt32(count) > 1)
         {
             Console.WriteLine($"Авто \"{name}\" уже существует!");
         }
+        else if (Convert.ToInt32(count) == 0)
+        {
+            Console.WriteLine("Такого типа авто не существует!");
+        }
         else
         {
-            reader.Close();
-            cmd.Cancel();
             var querySql = $"INSERT INTO car(id_type_car, name, state_number, number_passengers) " +
                            $"VALUES ('{id}', '{name}', '{stateNumber}', '{numOfPassengers}')";
-            using var cmd2 = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection());
-            cmd2.ExecuteNonQuery();
+            using (var cmd = new NpgsqlCommand(querySql, DatabaseService.GetSqlConnection()))
+            {
+                cmd.ExecuteNonQuery();
+            }
+            
             Console.WriteLine($"Авто \"{name}\" добавлено!");
         }
     }
