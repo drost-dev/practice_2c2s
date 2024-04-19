@@ -143,6 +143,11 @@ public static class DatabaseRequests
             {
                 cmd.ExecuteNonQuery();
             }
+            Console.WriteLine("Ошибка при добавлении сотрудника!");
+        }
+        else
+        {
+            Console.WriteLine("Сотрудник добавлен!");
         }
     }
 
@@ -159,7 +164,7 @@ public static class DatabaseRequests
 
         while (reader.Read())
         {
-            Console.WriteLine($"Id: {reader[0]}, Имя: {reader[1]}, Фамилия: {reader[2]}, Дата рождения: {reader[3]}");
+            Console.WriteLine($"Id: {reader[0]}, Имя: {reader[1]}, Фамилия: {reader[2]}, Дата рождения: {DateOnly.FromDateTime(Convert.ToDateTime(reader[3]))}");
         }
     }
     
@@ -173,7 +178,7 @@ public static class DatabaseRequests
         while (reader.Read())
         {
             Console.WriteLine($"Id: {reader[0]}, Имя: {reader[1]}, Фамилия: {reader[2]}, " +
-                              $"Дата рождения: {reader[3]}, Категория прав: {reader[7]}");
+                              $"Дата рождения: {DateOnly.FromDateTime(Convert.ToDateTime(reader[3]))}, Категория прав: {reader[7]}");
         }
     }
 
@@ -227,7 +232,7 @@ public static class DatabaseRequests
     /// </summary>
     public static void GetDriverRightsCategoryQuery(int driver)
     {
-        var querySql = "SELECT dr.first_name, dr.last_name, rc.name " +
+        var querySql = "SELECT dr.first_name, dr.last_name, dr.birthdate, rc.name " +
                        "FROM driver_rights_category " +
                        "INNER JOIN driver dr on driver_rights_category.id_driver = dr.id " +
                        "INNER JOIN rights_category rc on rc.id = driver_rights_category.id_rights_category " +
@@ -237,7 +242,7 @@ public static class DatabaseRequests
 
         while (reader.Read())
         {
-            Console.WriteLine($"Имя: {reader[0]}, Фамилия: {reader[1]}, Категория прав: {reader[2]}");
+            Console.WriteLine($"Имя: {reader[0]}, Фамилия: {reader[1]}, Дата рождения: {DateOnly.FromDateTime(Convert.ToDateTime(reader[2]))} Категория прав: {reader[3]}");
         }
     }
     
@@ -324,6 +329,8 @@ public static class DatabaseRequests
         }
         else
         {
+            cmd.Cancel();
+            reader.Close();
             Console.WriteLine($"Маршрут \"{name}\" уже существует!");
         }
     }
@@ -368,6 +375,8 @@ public static class DatabaseRequests
         }
         else
         {
+            cmd.Cancel();
+            reader.Close();
             Console.WriteLine($"Рейс уже существует!");
         }
     }

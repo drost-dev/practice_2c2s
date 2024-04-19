@@ -36,9 +36,11 @@ public class Program
                         switch (getChoose())
                         {
                             case 1:
+                                //просмотр типов машин
                                 DatabaseRequests.GetTypeCarQuery();
                                 break;
                             case 2:
+                                //добавление типа авто
                                 Console.Write("Название типа авто: ");
                                 DatabaseRequests.AddTypeCarQuery(Console.ReadLine());
                                 break;
@@ -65,11 +67,11 @@ public class Program
                                 switch (getChoose())
                                 {
                                     case 1:
-                                        //все водители
+                                        //просмотр всех водителей
                                         DatabaseRequests.GetDriverAndRightsCategoryQuery();
                                         break;
                                     case 2:
-                                        //по ID
+                                        //просмотр водителя по ID
                                         Console.Write("ID водителя: ");
                                         DatabaseRequests.GetDriverRightsCategoryQuery(Convert.ToInt32(Console.ReadLine()));
                                         break;
@@ -78,17 +80,16 @@ public class Program
                                 }
                                 break;
                             case 2:
-                                //добавление водителей и прав
+                                //добавление водителя и его прав
                                 Console.Write("Имя: ");
                                 string name = Console.ReadLine();
                                 Console.Write("Фамилия: ");
                                 string surname = Console.ReadLine();
                                 Console.Write("Дата рождения: ");
-                                var date = Console.ReadLine();
+                                DateTime date = DateTime.Parse(Console.ReadLine());
                                 Console.Write("Введите категории прав (слитно): ");
                                 string rights = Console.ReadLine();
-                                DatabaseRequests.AddDriverQuery(name, surname, DateTime.Parse(date), rights);
-                                Console.WriteLine("Сотрудник добавлен!");
+                                DatabaseRequests.AddDriverQuery(name, surname, date, rights);
                                 break;
                             case 0:
                                 break;
@@ -105,9 +106,11 @@ public class Program
                         switch (getChoose())
                         {
                             case 1:
+                                //просмотр машин
                                 DatabaseRequests.GetCarQuery();
                                 break;
                             case 2:
+                                //добавление машины
                                 Console.Write("ID типа авто: ");
                                 int id = Convert.ToInt32(Console.ReadLine());
                                 Console.Write("Название: ");
@@ -132,9 +135,11 @@ public class Program
                         switch (getChoose())
                         {
                             case 1:
+                                //просмотр маршрутов
                                 DatabaseRequests.GetItinearyQuery();
                                 break;
                             case 2:
+                                //добавление маршрута
                                 Console.Write("Введите название маршрута: ");
                                 string name = Console.ReadLine();
                                 DatabaseRequests.AddItinearyQuery(name);
@@ -154,12 +159,20 @@ public class Program
                         switch (getChoose())
                         {
                             case 1:
+                                //просмотр рейсов
                                 DatabaseRequests.GetRouteQuery();
                                 break;
                             case 2:
-                                
-                                DatabaseRequests.AddRouteQuery(1, 1, 1, 10);
-                                //DatabaseRequests.AddItinearyQuery(name);
+                                //добавление рейса
+                                Console.Write("ID водителя: ");
+                                int idDriver = Convert.ToInt32(Console.ReadLine());
+                                Console.Write("ID машины: ");
+                                int idCar = Convert.ToInt32(Console.ReadLine());
+                                Console.Write("ID маршрута: ");
+                                int idItinerary = Convert.ToInt32(Console.ReadLine());
+                                Console.Write("Количество пассажиров: ");
+                                int numOfPass = Convert.ToInt32(Console.ReadLine());
+                                DatabaseRequests.AddRouteQuery(idDriver, idCar, idItinerary, numOfPass);
                                 break;
                             case 0:
                                 break;
@@ -176,7 +189,6 @@ public class Program
             catch (Exception e)
             {
                 Console.WriteLine($"Произошла ошибка!\n{e}");
-                throw;
             }
         }
     }
